@@ -1,0 +1,29 @@
+# PDF Information Commands
+
+## Basic PDF Information Commands
+pdfinfo document.pdf                             # Shows PDF version, page count, metadata, encryption status, and other details
+qpdf --check document.pdf                        # Validates PDF structure and provides basic information
+exiftool document.pdf                            # Shows extensive metadata including PDF version and properties
+pdf-parser document.pdf                          # Analyzes PDF objects for in-depth structure analysis
+
+## Checking for Embedded Text
+pdftotext document.pdf - | wc -w                 # Extracts text and counts words; if count > 0, PDF contains extractable text
+pdftotext -layout document.pdf - | less          # View extracted text with original layout preserved
+
+## Using OCRmyPDF to Check for Text
+ocrmypdf -s --output-type=none --sidecar=- document.pdf /dev/null     # If it extracts text without OCR, there's text in the PDF
+ocrmypdf --skip-text --force-ocr document.pdf output.pdf              # Will report pages that contain text
+
+## PDF Structure Analysis
+mutool extract document.pdf                      # Extracts text, images, and fonts from the PDF
+mutool info document.pdf                         # Shows PDF structure information
+pdftk document.pdf dump_data                     # Shows PDF metadata and structure
+
+## PDF Content Analysis
+pdfimages -list document.pdf                     # Lists all images in the PDF with details (resolution, color space, etc.)
+pdffonts document.pdf                            # Lists all fonts used in the PDF
+qpdf --show-object=3,0 document.pdf             # Examine specific PDF objects
+
+## PDF Validation
+jhove document.pdf                               # Validates PDF against format specifications
+verapdf document.pdf                             # PDF/A validation and conformance checking 

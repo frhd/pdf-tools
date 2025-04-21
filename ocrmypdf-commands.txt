@@ -1,0 +1,63 @@
+# OCRmyPDF Example Commands
+
+## Basic Commands
+ocrmypdf input.pdf output.pdf                             # Basic OCR with default settings
+ocrmypdf -l eng+deu input.pdf output.pdf                  # OCR with English and German language support
+ocrmypdf --image-dpi 300 scan.jpg output.pdf              # Process an image with specified DPI
+
+## Informational Commands
+ocrmypdf --version                                        # Display version information
+ocrmypdf --help                                           # Show help message and options
+ocrmypdf -v 1 input.pdf output.pdf                        # Run with verbose output for debugging
+
+## Output Format Commands
+ocrmypdf --output-type pdfa input.pdf output.pdf          # Create PDF/A-2b compliant file (default)
+ocrmypdf --output-type pdf input.pdf output.pdf           # Minimize changes to input file
+ocrmypdf --output-type pdfa-1 input.pdf output.pdf        # Create PDF/A-1b file
+ocrmypdf --output-type pdfa-3 input.pdf output.pdf        # Create PDF/A-3b file
+ocrmypdf --sidecar output.txt input.pdf output.pdf        # Generate sidecar text file with OCR text
+ocrmypdf --sidecar - input.pdf output.pdf                 # Output OCR text to stdout for preview
+
+## Image Preprocessing Commands
+ocrmypdf -r input.pdf output.pdf                          # Automatically rotate pages based on text orientation
+ocrmypdf --remove-background input.pdf output.pdf         # Remove background from gray/color pages
+ocrmypdf -d input.pdf output.pdf                          # Deskew pages before OCR
+ocrmypdf -c input.pdf output.pdf                          # Clean pages from scanning artifacts before OCR
+ocrmypdf -i input.pdf output.pdf                          # Clean and incorporate cleaned image in final PDF
+ocrmypdf --oversample 600 input.pdf output.pdf            # Oversample images to specified DPI to improve OCR
+
+## OCR Control Commands
+ocrmypdf -f input.pdf output.pdf                          # Force OCR on all pages (rasterize everything)
+ocrmypdf -s input.pdf output.pdf                          # Skip OCR on pages that already contain text
+ocrmypdf --redo-ocr input.pdf output.pdf                  # Remove existing OCR layer and redo OCR
+ocrmypdf --skip-big 20 input.pdf output.pdf               # Skip OCR on pages larger than 20 megapixels
+ocrmypdf --pages 1-5,7,9 input.pdf output.pdf             # OCR only specified pages
+
+## Performance and Job Control Commands
+ocrmypdf -j 4 input.pdf output.pdf                        # Use 4 CPU cores for processing
+ocrmypdf -q input.pdf output.pdf                          # Run quietly (suppress INFO messages)
+
+## Metadata Commands
+ocrmypdf --title "Document Title" input.pdf output.pdf    # Set document title
+ocrmypdf --author "Author Name" input.pdf output.pdf      # Set document author
+ocrmypdf --subject "Subject" --keywords "key1, key2" input.pdf output.pdf  # Set subject and keywords
+
+## Advanced Tesseract Control Commands
+ocrmypdf --tesseract-pagesegmode 6 input.pdf output.pdf   # Set Tesseract page segmentation mode
+ocrmypdf --tesseract-oem 1 input.pdf output.pdf           # Use LSTM neural networks only for OCR
+ocrmypdf --tesseract-timeout 30 input.pdf output.pdf      # Give up on OCR after 30 seconds
+ocrmypdf --user-words words.txt input.pdf output.pdf      # Use custom dictionary for OCR
+
+## Optimization Commands
+ocrmypdf -O 2 input.pdf output.pdf                        # Use lossy JPEG optimization
+ocrmypdf --jpeg-quality 75 input.pdf output.pdf           # Set JPEG quality for optimization
+ocrmypdf --jbig2-lossy input.pdf output.pdf               # Enable JBIG2 lossy compression mode
+
+## Combined Examples
+ocrmypdf -l eng --deskew --clean --skip-text input.pdf output.pdf  # English OCR with deskew, clean, skip existing text
+ocrmypdf -l eng+fra -r -d -i -j 2 input.pdf output.pdf    # OCR with English and French, rotate, deskew, clean, use 2 cores
+ocrmypdf -l eng --sidecar output.txt --output-type pdfa --title "My Document" input.pdf output.pdf  # Full OCR with sidecar and metadata
+
+## Piping Examples
+img2pdf --pagesize A4 scan.png | ocrmypdf - output.pdf    # Convert image to PDF and pipe to OCRmyPDF
+ocrmypdf input.pdf - | pdftk - cat 1-5 output output.pdf  # Process with OCRmyPDF and pipe to pdftk
